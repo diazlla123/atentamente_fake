@@ -1,0 +1,106 @@
+/* === FONDO GENERAL UNIFICADO (incluye navbar y barra superior) === */
+html, body, [data-testid="stAppViewContainer"], .main, .block-container,
+header[data-testid="stHeader"], [data-testid="stSidebar"] {
+    background-color: #c9c9c9 !important;
+    color: black !important;
+    font-family: 'Segoe UI', sans-serif;
+    box-shadow: none !important;
+}
+
+/* === CONTENEDOR DEL INPUT === */
+section[data-testid="stChatInput"],
+div[class^="st-emotion-cache"][class*="en45"] {
+    background-color: #c9c9c9 !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+/* === CAJA DE TEXTO DEL USUARIO === */
+input[type="text"] {
+    background-color: #f8f4ec !important;  /* tono crema */
+    color: black !important;
+    border-radius: 50px !important;
+    padding: 0.75rem 1.2rem !important;
+    border: none !important;
+    font-size: 14px;
+    width: 100%;
+    box-shadow: none !important;
+}
+
+/* === BOTÓN DE ENVIAR Y TODOS LOS BOTONES NARANJAS === */
+button {
+    background-color: #ec6041 !important;
+    color: white !important;
+    border-radius: 12px !important;
+    padding: 0.6rem 1rem !important;
+    border: none !important;
+    font-size: 14px;
+    box-shadow: none !important;
+}
+
+button:hover {
+    background-color: #d94f34 !important;
+}
+
+/* === BOTÓN DE ENVIAR REDONDO === */
+button[kind="primary"] {
+    border-radius: 50% !important;
+    padding: 0.75rem !important;
+    font-size: 16px;
+    margin-left: 0.5rem;
+}
+
+/* === ESTILO DE LOS MENSAJES TIPO CHAT === */
+[data-testid="stChatMessage"] {
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    max-width: 90%;
+    margin-bottom: 0.75rem;
+    display: flex;
+}
+
+/* === MENSAJES DEL USUARIO A LA DERECHA === */
+.stChatMessage.human {
+    justify-content: flex-end;
+}
+
+.stChatMessage.human .element-container {
+    background-color: #FBB03B !important;
+    color: black !important;
+    padding: 1rem;
+    border-radius: 16px;
+    text-align: left;
+    max-width: 70%;
+    margin-left: auto !important;
+}
+
+/* === MENSAJES DEL BOT A LA IZQUIERDA CON FONDO AZUL OSCURO === */
+.stChatMessage.ai {
+    justify-content: flex-start;
+}
+
+.stChatMessage.ai .element-container {
+    background-color: #084bd1 !important;
+    color: white !important;
+    padding: 1rem;
+    border-radius: 16px;
+    text-align: left;
+    max-width: 70%;
+}
+
+/* === MENSAJES DESTACADOS OPCIONALES === */
+.stChatMessage.special .element-container {
+    background-color: #0C2340 !important;
+    color: white !important;
+}
+
+/* === BOTÓN DE CONSENTIMIENTO NARANJA CON TEXTO BLANCO === */
+button:has(span:contains("He leído")) {
+    background-color: #ec6041 !important;
+    color: white !important;
+    border-radius: 12px !important;
+    border: none !important;
+    box-shadow: none !important;
+}
