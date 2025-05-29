@@ -2,6 +2,7 @@ import streamlit as st
 
 # MUST BE FIRST
 st.set_page_config(page_title="Study bot", page_icon="📖")
+st.image("atentamente_logo.svg")
 
 import os
 import sys
