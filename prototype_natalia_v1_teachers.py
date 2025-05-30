@@ -59,8 +59,6 @@ if 'exp_data' not in st.session_state:
     st.session_state['exp_data'] = True
 if 'llm_model' not in st.session_state:
     st.session_state.llm_model = "gpt-4o"
-if 'intro_shown' not in st.session_state:
-    st.session_state.intro_shown = False
 if 'final_response' not in st.session_state:
     st.session_state.final_response = None
 if 'waiting_for_listo' not in st.session_state:
@@ -94,14 +92,15 @@ conversation = ConversationChain(prompt=prompt_updated, llm=chat, verbose=True, 
 if st.session_state['consent']:
     entry_messages = st.expander("Collecting your story", expanded=st.session_state['exp_data'])
 
-    # Show initial AI message if chat just started
-    if not st.session_state.intro_shown:
+    # Inicializar con mensaje de bienvenida si no hay mensajes
+    if not msgs.messages:
         msgs.add_ai_message(llm_prompts.questions_intro)
-        with entry_messages:
-            st.chat_message("ai").markdown(
-                f"<span style='color:black'>{llm_prompts.questions_intro}</span>",
-                unsafe_allow_html=True)
-        st.session_state.intro_shown = True
+
+    # Mostrar todos los mensajes anteriores en orden
+    with entry_messages:
+        for m in msgs.messages:
+            with st.chat_message(m.type):
+                st.markdown(f"<span style='color:black'>{m.content}</span>", unsafe_allow_html=True)
 
     prompt = st.chat_input()
 
@@ -116,7 +115,7 @@ if st.session_state['consent']:
                     st.chat_message("ai").markdown(
                         f"<span style='color:black'>{response['response']}</span>",
                         unsafe_allow_html=True
-                )
+                    )
                 else:
                     st.warning("🔒 Para comenzar, por favor escribe la palabra **\"listo\"**.")
             else:
@@ -125,13 +124,13 @@ if st.session_state['consent']:
                     refinement_prompt = PromptTemplate(
                         input_variables=["text"],
                         template="""
-    Toma el siguiente texto y reescríbelo de forma clara, directa y estructurada para que la persona pueda ver reflejada su propia experiencia. 
-    La finalidad de esta sección es despertar dentro de la persona una introspección sobre su situación y el cómo es que la maneja.
-    La micronarrativa debe estar basada en los inputs de la persona, siendo objetiva y concisa, con una postura neutra.
-    Haz este párrafo tener una longitud mínima de 3 oraciones y máxima de un párrafo.
+Toma el siguiente texto y reescríbelo de forma clara, directa y estructurada para que la persona pueda ver reflejada su propia experiencia. 
+La finalidad de esta sección es despertar dentro de la persona una introspección sobre su situación y el cómo es que la maneja.
+La micronarrativa debe estar basada en los inputs de la persona, siendo objetiva y concisa, con una postura neutra.
+Haz este párrafo tener una longitud mínima de 3 oraciones y máxima de un párrafo.
 
-    {text}
-    """
+{text}
+"""
                     )
                     refined_chain = refinement_prompt | chat
                     refined = refined_chain.invoke({"text": response['response']})
@@ -142,7 +141,8 @@ if st.session_state['consent']:
                     st.session_state.final_response = refined.content
                     st.rerun()
                 else:
-                    st.chat_message("ai").write(response['response'])
+                    st.chat_message("ai").markdown(f"<span style='color:black'>{response['response']}</span>",
+                        unsafe_allow_html=True)
 
     # Show editable final summary if collected
     if st.session_state.agentState == "summarise" and st.session_state.final_response:
@@ -175,15 +175,15 @@ if st.session_state['consent']:
             st.markdown("---")
             st.markdown("### 📝 ¿Nos ayudas con tu opinión?")
             st.markdown(
-    """
-    <a href="https://forms.gle/pxBtvu8WPRAort7b7" target="_blank">
-        <button style="background-color:#ec6041; color:white; padding:0.75rem 1.5rem; border:none; border-radius:12px; font-size:16px; cursor:pointer;">
-            Ir a encuesta de retroalimentación
-        </button>
-    </a>
-    """,
-    unsafe_allow_html=True
-)
+                """
+                <a href="https://forms.gle/pxBtvu8WPRAort7b7" target="_blank">
+                    <button style="background-color:#ec6041; color:white; padding:0.75rem 1.5rem; border:none; border-radius:12px; font-size:16px; cursor:pointer;">
+                        Ir a encuesta de retroalimentación
+                    </button>
+                </a>
+                """,
+                unsafe_allow_html=True
+            )
 else:
     consent_message = st.container()
     with consent_message:
